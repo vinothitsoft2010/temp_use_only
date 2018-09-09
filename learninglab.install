@@ -1,0 +1,473 @@
+<?php
+
+// $Id$
+/**
+ * @file
+ * Install and uninstall the variables and schemas used by the module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function learninglab_install() {
+    /*
+     * SAMPLES:
+     *  variable_set('identifier', 'value');
+     *  drupal_install_schema('learninglab'); // Look for hook learninglab_schema
+     */
+    drupal_install_schema('learninglab');
+    
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function learninglab_uninstall() {
+    /*
+     * SAMPLES:
+     *  variable_del('identifier');
+     *  drupal_uninstall_schema('learninglab');
+     */
+    drupal_uninstall_schema('learninglab');
+}
+
+/**
+ * Implements hook_schema().
+ */
+function learninglab_schema() {
+    $schema = array();
+
+    //Table to map the diferent products in sharepoint.
+    $schema['product_therapeutic_area'] = array(
+      'description' => 'Table to map therapeutic areas.',
+      'fields' => array(
+        'therapeutic_area' => array(
+          'description' => 'Therapeutic Area Name',
+          'type' => 'varchar',
+          'length' => '150',
+        ),
+        'product' => array(
+          'description' => 'Product Name',
+          'type' => 'varchar',
+          'length' => '150',
+        ),
+      ),
+      'primary key' => array('therapeutic_area', 'product'),
+    );
+
+    //Table to map the diferent products in sharepoint.
+    $schema['drupal_obsolete_url_map'] = array(
+      'description' => 'Table to map obsolete urls.',
+      'fields' => array(
+        'sharepoint_id' => array(
+          'description' => 'Sharepoint id',
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'url' => array(
+          'description' => 'Url',
+          'type' => 'varchar',
+          'length' => '128',
+          'not null' => TRUE,
+        ),
+        'obsolete' => array(
+          'description' => 'Obsolete status.',
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+        ),
+        'changed' => array(
+          'description' => 'Last changed time.',
+          'type' => 'int',
+          'not null' => TRUE,
+          'default' => 0,
+        ),
+      ),
+      'primary key' => array('url'),
+    );
+
+
+    return $schema;
+}
+
+function learninglab_update_7001() {
+
+    $schema['drupal_product_suggestion_keywords'] = array(
+      'description' => 'Table to save suggestion products based on the search term.',
+      'fields' => array(
+        'id' => array(
+          'description' => 'Id',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'product' => array(
+          'description' => 'Product name',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+        ),
+        'location' => array(
+          'description' => 'Location where the product is published.',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+        ),
+        'search_term' => array(
+          'description' => 'Term used in search.',
+          'type' => 'varchar',
+          'length' => '255',
+          'not null' => TRUE,
+        ),
+      ),
+      'primary key' => array('id'),
+    );
+    db_create_table('drupal_product_suggestion_keywords', $schema['drupal_product_suggestion_keywords']);
+}
+
+function learninglab_update_7002() {
+
+    $schema['drupal_search_cache'] = array(
+      'description' => 'Search Cache.',
+      'fields' => array(
+        'query_term' => array(
+          'description' => 'Term Query',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'component_type' => array(
+          'description' => 'Component Type',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'xml' => array(
+          'description' => 'XML',
+          'type' => 'blob',
+          'size' => big
+        ),
+        'id' => array(
+          'description' => 'Id',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+        ),
+        'product' => array(
+          'description' => 'Product',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'created_at' => array(
+          'description' => 'Created at',
+          'type' => 'int',
+        ),
+        'has_slide_deck' => array(
+          'description' => 'has_slide_deck',
+          'type' => 'int',
+        ),
+        'suggestion' => array(
+          'description' => 'Suggestion',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'original_query_term' => array(
+          'description' => 'original_query_term',
+          'type' => 'text',
+        ),
+        'original_result_count' => array(
+          'description' => 'original_result_count',
+          'type' => 'int',
+          'size' => 'medium',
+        ),
+      ),
+      'primary key' => array('id'),
+    );
+    db_create_table('drupal_search_cache', $schema['drupal_search_cache']);
+
+    $schema['drupal_audit_log_queue'] = array(
+      'description' => 'Audit log queue.',
+      'fields' => array(
+        'id' => array(
+          'description' => 'Id',
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+        'user_track_id' => array(
+          'description' => 'Track id from contact us form.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ),
+        'status' => array(
+          'description' => 'Process status.',
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+        ),
+        'attempts' => array(
+          'description' => 'Number of attempts',
+          'type' => 'int',
+          'size' => 'tiny',
+          'not null' => TRUE,
+          'default' => 0,
+          'unsigned' => TRUE,
+        ),
+      ),
+      'primary key' => array('id'),
+    );
+    db_create_table('drupal_audit_log_queue', $schema['drupal_audit_log_queue']);
+}
+
+function learninglab_update_7003() {
+
+    db_drop_table('drupal_audit_log');
+    $schema['drupal_audit_log'] = array(
+      'description' => 'Audit log table.',
+      'fields' => array(
+        'searchdate' => array(
+          'description' => 'Date time',
+          'type' => 'datetime',
+          'mysql_type' => 'datetime',
+        ),
+        'user_track_id' => array(
+          'description' => 'Track id from contact us form.',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ),
+        'search_json' => array(
+          'description' => 'Information about the search and its results.',
+          'type' => 'blob',
+        ),
+        'page_json' => array(
+          'description' => 'Information about the dita content (package information).',
+          'type' => 'blob',
+        ),
+        'query_term' => array(
+          'description' => 'Query Term',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'product' => array(
+          'description' => 'Product',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'log_again' => array(
+          'description' => '1 if the search should log again.',
+          'type' => 'int',
+        ),
+        'email_sent' => array(
+          'description' => 'flag to control if the audit_log mail was sent.',
+          'type' => 'int',
+        ),
+        'device' => array(
+          'description' => 'get the device.',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'search_resuts_file_created' => array(
+          'description' => 'flag to control the search results file generation.',
+          'type' => 'int',
+        ),
+        'external_content_url' => array(
+          'description' => 'external_content_url.',
+          'type' => 'varchar',
+          'length' => '512',
+        ),
+        'node_title_viewed' => array(
+          'description' => 'node_title_viewed.',
+          'type' => 'varchar',
+          'length' => '512',
+        ),
+      ),
+      'primary key' => array('searchdate', 'user_track_id'),
+    );
+    db_create_table('drupal_audit_log', $schema['drupal_audit_log']);
+}
+
+/**
+ * Set the therapeutic area, products and taxonomy for tools content type
+ * This is to handle the dynamic creation of allowed values against the features
+ */
+function learninglab_update_7004() {
+
+    // Check if field_tool_therapeutic_areas and field_tool_product exists exists
+    if (!db_table_exists('field_data_field_therapeutic_areas')) {
+        $out = array(
+          '#abort' => array(
+            'success' => FALSE,
+            'query' => 'The field_data_field_therapeutic_areas table doesn\'t exist yet, which likely means that the My Module Feature hasnt been reverted yet (which needs to happen before this update can run).'
+          )
+        );
+        return $out;
+    }
+    else if (!db_table_exists('field_data_field_tool_product')) {
+        $out = array(
+          '#abort' => array(
+            'success' => FALSE,
+            'query' => 'The field_data_field_tool_product table doesn\'t exist yet, which likely means that the My Module Feature hasnt been reverted yet (which needs to happen before this update can run).'
+          )
+        );
+        return $out;
+    }
+    else if (!db_table_exists('field_data_field_tool_category')) {
+        $out = array(
+          '#abort' => array(
+            'success' => FALSE,
+            'query' => 'The field_data_field_tool_category table doesn\'t exist yet, which likely means that the My Module Feature hasnt been reverted yet (which needs to happen before this update can run).'
+          )
+        );
+        return $out;
+    }
+
+    // Products
+    $field_tool_product = field_info_field('field_tool_product'); // machine name of field
+    unset($field_tool_product['settings']['allowed_values']); // having this set interferes with the allowed_values_function value
+    $field_tool_product['settings']['allowed_values_function'] = 'learninglab_get_products_list'; // function name that provides array of values
+    field_update_field($field_tool_product);
+
+    // Therapeutic Area
+    $field_therapeutic_areas = field_info_field('field_therapeutic_areas'); // machine name of field
+    unset($field_therapeutic_areas['settings']['allowed_values']); // having this set interferes with the allowed_values_function value
+    $field_therapeutic_areas['settings']['allowed_values_function'] = 'learninglab_get_all_therapeutic_area_list'; // function name that provides array of values
+    field_update_field($field_therapeutic_areas);
+
+    // Tool Taxonomy
+    $field_tool_category = field_info_field('field_tool_category'); // machine name of field
+    unset($field_tool_category['settings']['allowed_values']); // having this set interferes with the allowed_values_function value
+    $field_tool_category['settings']['allowed_values_function'] = '_learninglab_field_tool_category_list'; // function name that provides array of values
+    field_update_field($field_tool_category);
+}
+
+/**
+ * Set the therapeutic area, products and taxonomy for tools content type
+ * Now we are handling the products via node reference, so we need to unset the allowed values function
+ */
+function learninglab_update_7005() {
+
+    // Check if field_tool_product exists
+    if (!db_table_exists('field_data_field_tool_product')) {
+        $out = array(
+          '#abort' => array(
+            'success' => FALSE,
+            'query' => 'The field_data_field_tool_product table doesn\'t exist yet, which likely means that the My Module Feature hasnt been reverted yet (which needs to happen before this update can run).'
+          )
+        );
+        return $out;
+    }
+
+    // Products
+    $field_tool_product = field_info_field('field_tool_product'); // machine name of field
+    unset($field_tool_product['settings']['allowed_values']); // having this set interferes with the allowed_values_function value
+    unset($field_tool_product['settings']['allowed_values_function']);
+    field_update_field($field_tool_product);
+}
+
+/*
+ * Creates product node reference map
+ */
+
+function learninglab_update_7006() {
+
+    $schema['learninglab_product_id_map'] = array(
+      'description' => 'Table that stores old products nid for recreation uppon channel refresh',
+      'fields' => array(
+        'nid' => array(
+          'description' => 'Node Id',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ),
+        'product_name' => array(
+          'description' => 'Name of the product',
+          'type' => 'varchar',
+          'length' => '255',
+        ),
+        'disclaimer_id' => array(
+          'description' => 'Id of the disclaimer',
+          'type' => 'int',
+          'unsigned' => TRUE,
+        ),
+      ),
+    );
+
+    if (!db_table_exists('learninglab_product_id_map')) {
+        db_create_table('learninglab_product_id_map', $schema['learninglab_product_id_map']);
+    }
+}
+
+/**
+ * Remove primary key from drupal_audit_log table.
+ */
+function learninglab_update_7007() {
+    // This change sets a valid default value to field.
+    $table = 'drupal_audit_log';
+    $spec = array(
+      'description' => 'Date time',
+      'type' => 'datetime',
+      'mysql_type' => 'datetime',
+      'default' => '1970-01-01 00:00:00'
+    );
+    db_change_field($table, 'searchdate', 'searchdate', $spec);
+    db_drop_primary_key($table);
+}
+
+/**
+ * Site Audit Fix - Change system filepath on subsites. Before running this update, make sure the sytem file path is correct.
+ */
+function learninglab_update_7008() {
+    $right_file_path = variable_get('file_public_path', conf_path() . '/files');
+    if (strpos($right_file_path, 'preview')) {
+        // Preview channel
+        $wrong_file_path = 'sites/dev-preview-projectmd.client.com/files';
+    }
+    elseif (strpos($right_file_path, 'pre-pub')) {
+        // Pre Pub channel
+        $wrong_file_path = 'sites/dev-pre-pub-projectmd.client.com/files';
+    }
+    elseif (preg_match('/^sites\/default\/files$/', $right_file_path) == 1) {
+        // Should be Publish channel -> No action to be taken
+        return;
+    }
+    else {
+        throw new DrupalUpdateException('Unknown channel.');
+    }
+
+    $select = db_select('variable', 'v')
+        ->fields('v', array('name'))
+        ->comment('Load all variables')
+        ->execute();
+    $variables = $select->fetchAll();
+
+    foreach ($variables as $variable) {
+        $value = variable_get($variable->name, FALSE);
+
+        if (is_string($value)) {
+            if (strpos($value, $wrong_file_path) !== FALSE) {
+                $updated_value = str_replace($wrong_file_path, $right_file_path, $value);
+                variable_set($variable->name, $updated_value);
+                watchdog("Fix path", $variable->name . '<br />' . $updated_value);
+            }
+        }
+    }
+}
+
+/**
+ * Eureka updates for auditlog files
+ */
+function learninglab_update_7009() {
+    // Add id column to Audit log table
+    $table = 'drupal_audit_log';
+    $spec = array(
+      'description' => 'id',
+      'type' => 'int',
+    );
+    db_add_field($table, 'id', $spec);
+    db_add_unique_key($table, 'id', array('id'));
+
+    // Change it to autoincrement
+    $spec = array(
+      'description' => 'id',
+      'type' => 'serial',
+      'not null' => TRUE,
+    );
+    db_change_field($table, 'id', 'id', $spec);
+}

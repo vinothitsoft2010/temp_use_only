@@ -1,0 +1,174 @@
+{
+    "name": "clientos/Proj-repo",
+    "description": "Project",
+    "type": "project",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Vinoth",
+            "role": ""
+        }
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "dinbror/blazy",
+                "version": "1.8.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/dinbror/blazy/archive/1.8.2.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "gdsmith/jquery.easing",
+                "version": "1.4.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/gdsmith/jquery.easing/archive/1.4.1.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "kenwheeler/slick",
+                "version": "1.7.1",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/kenwheeler/slick/archive/1.7.1.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "enyo/dropzone",
+                "version": "4.3.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/enyo/dropzone/archive/v4.3.0.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "desandro/imagesloaded",
+                "version": "3.2.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/desandro/imagesloaded/archive/v3.2.0.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "desandro/masonry",
+                "version": "3.3.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/desandro/masonry/archive/v3.3.2.zip",
+                    "type": "zip"
+                },
+                "require": {
+                    "composer/installers": "~1.0"
+                }
+            }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/scm/asx-nagy/clientos.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/scm/asx-nagy/clientcanvas.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/scm/asx-naml/clientProj.git"
+        }
+    ],
+    "require": {
+        "cweagans/composer-patches": "^1.6.0",
+        "drupal/clientProj": "v8.4.8.8",
+        "drupal/fontawesome": "^1.2",
+        "drupal/acquia_connector": "1.x-dev#70f9e34",
+        "drupal/viewsreference": "^1.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "geerlingguy/drupal-vm": "^4.7.0",
+        "drupal/coder": "^2.0",
+        "drupal/devel": "^1.0",
+        "phpunit/phpunit": "~4.8",
+        "phing/phing": "~2.16",
+        "squizlabs/php_codesniffer": "2.*",
+        "drupal/default_content": "^1.0@alpha"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Drupal\\Core\\Composer\\Composer::ensureHtaccess",
+            "cd vendor/simplesamlphp/simplesamlphp && rm -rf metadata",
+            "cd vendor/simplesamlphp/simplesamlphp && rm -rf config",
+            "cd vendor/simplesamlphp/simplesamlphp && ln -sf ../../../simplesamlphp/metadata metadata",
+            "cd vendor/simplesamlphp/simplesamlphp && ln -sf ../../../simplesamlphp/config config",
+            "cd vendor/simplesamlphp/simplesamlphp && ln -sf ../../../simplesamlphp/cert cert"
+        ],
+        "post-install-cmd": [
+            "@composer drupal-scaffold"
+        ],
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+    },
+    "extra": {
+        "installer-paths": {
+            "docroot/core": ["type:drupal-core"],
+            "docroot/modules/contrib/{$name}": ["type:drupal-module"],
+            "docroot/libraries/{$name}": ["type:drupal-library"],
+            "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "docroot/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/contrib/{$name}": ["type:drupal-drush"]
+        },
+        "drupal-scaffold": {
+            "excludes": [
+                ".htaccess",
+                "sites/development.services.yml"
+            ]
+        },
+        "enable-patching": true,
+        "patches": {
+            "drupal/password_policy": {
+                "#2860671 - Cron expire date format and timezone is incorrect, leads to infinite password resets": "https://www.drupal.org/files/issues/2860671-password-policy-cron-fix-2.patch"
+            }
+        }
+    }
+}
