@@ -476,15 +476,6 @@ function learninglab_preprocess_page(&$variables) {
             ), 'setting');
 
         //If the page that going to show is a full image page, then show the original image size.
-        /*
-          if (arg(0) == 'image') {
-          $device = '';
-          }
-          else {
-
-          if ($theme_path != 'sites/all/themes/learninglab_mobile_theme') {
-          //$pdf_options = 'pdf-version';
-         */
 
         $print_options = 'printerfriendly';
 
@@ -494,48 +485,9 @@ function learninglab_preprocess_page(&$variables) {
 
         $variables['node']->field_html_content[LANGUAGE_NONE][0]['value'] = _learninglab_replace_images_url($variables['node']->field_html_content[LANGUAGE_NONE][0]['value']);
 
-        /*
-          $device = mobile_tools_is_mobile_device();
-          _learninglab_insert_a_sup_id($variables['node']);
-
-
-          if ($device['type'] != 'mobile') {
-          if (_learninglab_is_product_home($variables['node']->nid)) {
-          //Rearrange the H1 and the blue bar when the page is a product home page. //Only for web theme
-          _learninglab_blue_bar_product_home($variables['node']->field_html_content[0]['value']);
-          }
-          elseif (_learninglab_is_content_browsable($variables['node'])) {
-          //Append one H2 element with blue bar
-          _learninglab_blue_bar_browseable_product($variables['node']->field_html_content[0]['value']);
-          }
-          }
-          else {
-          _learninglab_insert_square_brackets($variables['node']);
-          } */
 
         $variables['node']->field_html_content[LANGUAGE_NONE][0]['value'] = str_replace('@domain_target_channel@/', $base_path, $variables['node']->field_html_content[LANGUAGE_NONE][0]['value']);
         $variables['node']->field_html_content[LANGUAGE_NONE][0]['value'] = _learninglab_replace_last_updated($variables['node']->field_html_content[LANGUAGE_NONE][0]['value'], $variables['node']);
-
-        /*
-          //replace slide deck no flash content.
-
-          $no_flash_message = '<div>';
-          if ($device['type'] != 'mobile') {
-          $no_flash_message .= variable_get('no_flash_message_desktop', '');
-          }
-          else {
-          $no_flash_message .= variable_get('no_flash_message_mobile', '');
-          }
-          $no_flash_message .= '</div>';
-
-          $variables['node']->field_html_content[0]['value'] = str_replace(array('@slides_path@', '@no-flash-text@'),
-          array($base_path, $no_flash_message),
-          $variables['node']->field_html_content[0]['value']);
-
-          _learninglab_replace_slidedeck_url($variables['node']->field_html_content[0]['value']);
-
-          $variables['node']->field_html_content[0]['value'] = _process_tag($variables['node']->field_html_content[0]['value'], array('pre'), '_remove_extra_spaces');
-         */
     }
 
     if (arg(2) != 'edit' && arg(4) != 'edit') {
@@ -646,9 +598,6 @@ function _learninglab_disclaimer() {
     }
 
     $is_searching = _learninglab_is_user_searching();
-
-    //var_dump($is_searching);
-    //var_dump(MedicalInformationArea::get_status());
 
     /* D7 NOK MedicalInformationArea will be implemented
       if ($is_searching || MedicalInformationArea::get_status() === TRUE) {}
